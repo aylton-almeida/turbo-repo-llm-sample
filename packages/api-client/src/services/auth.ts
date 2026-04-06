@@ -21,7 +21,6 @@ export function createAuthService(client: ReturnType<typeof createApiClient>) {
         body: JSON.stringify({ refreshToken }),
       }),
 
-    logout: () =>
-      client.request<void>('/api/v1/auth/logout', { method: 'POST' }),
+    logout: () => client.request<void>('/api/v1/auth/logout', { method: 'POST' }),
   };
 }

@@ -19,4 +19,4 @@ class Settings(BaseSettings):
     LLM_MAX_TOKENS: int = 4096
 
 
-settings = Settings()
+settings = Settings()  # type: ignore[call-arg]

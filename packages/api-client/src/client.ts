@@ -21,7 +21,7 @@ export function createApiClient(config: ApiClientConfig) {
     });
 
     if (!response.ok) {
-      const errorBody = await response.json().catch(() => ({})) as Record<string, unknown>;
+      const errorBody = (await response.json().catch(() => ({}))) as Record<string, unknown>;
       const detail = errorBody['detail'] as Record<string, unknown> | undefined;
       throw new Error(
         String(detail?.['message'] ?? `HTTP ${response.status}: ${response.statusText}`),

@@ -24,4 +24,4 @@ class Settings(BaseSettings):
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
 
-settings = Settings()
+settings = Settings()  # type: ignore[call-arg]
