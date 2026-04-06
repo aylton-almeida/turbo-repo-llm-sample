@@ -1,0 +1,52 @@
+name: CI — AI Context Sync
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - ".ai/**"
+      - ".cursor/rules/**"
+      - ".github/instructions/**"
+      - ".github/copilot-instructions.md"
+      - "tools/scripts/sync-ai-context.sh"
+      - "Makefile"
+      - ".github/workflows/ci-ai-sync.yml"
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - ".ai/**"
+      - ".cursor/rules/**"
+      - ".github/instructions/**"
+      - ".github/copilot-instructions.md"
+      - "tools/scripts/sync-ai-context.sh"
+      - "Makefile"
+      - ".github/workflows/ci-ai-sync.yml"
+
+jobs:
+  check-sync:
+    name: Verify Generated AI Context Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run AI context sync
+        run: bash tools/scripts/sync-ai-context.sh
+
+      - name: Fail if generated files changed
+        run: |
+          if ! git diff --quiet -- .github/copilot-instructions.md .github/instructions .cursor/rules; then
+            echo "Generated AI context files are out of sync."
+            echo ""
+            echo "Please run:"
+            echo "  make ai-sync"
+            echo ""
+            echo "Changed files:"
+            git --no-pager diff --name-only -- .github/copilot-instructions.md .github/instructions .cursor/rules
+            echo ""
+            echo "Diff preview:"
+            git --no-pager diff -- .github/copilot-instructions.md .github/instructions .cursor/rules
+            exit 1
+          fi
+
+      - name: Success message
+        run: echo "AI context files are in sync."

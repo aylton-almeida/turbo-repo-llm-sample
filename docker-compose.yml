@@ -1,0 +1,151 @@
+services:
+  # ─── API Gateway ─────────────────────────────────────────────
+  api-gateway:
+    build:
+      context: ./services/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: development
+      PORT: "8000"
+      AUTH_SERVICE_URL: http://auth-service:8001
+      USERS_SERVICE_URL: http://users-service:8002
+      LLM_SERVICE_URL: http://llm-service:8003
+      NOTIFICATIONS_SERVICE_URL: http://notifications-service:8004
+    env_file:
+      - ./services/api-gateway/.env
+    volumes:
+      - ./services/api-gateway:/app
+    depends_on:
+      auth-service:
+        condition: service_started
+      users-service:
+        condition: service_started
+    networks:
+      - mono-network
+    restart: unless-stopped
+
+  # ─── Auth Service ─────────────────────────────────────────────
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      APP_ENV: development
+      PORT: "8001"
+    env_file:
+      - ./services/auth-service/.env
+    volumes:
+      - ./services/auth-service:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - mono-network
+    restart: unless-stopped
+
+  # ─── Users Service ────────────────────────────────────────────
+  users-service:
+    build:
+      context: ./services/users-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      APP_ENV: development
+      PORT: "8002"
+    env_file:
+      - ./services/users-service/.env
+    volumes:
+      - ./services/users-service:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - mono-network
+    restart: unless-stopped
+
+  # ─── LLM Service ─────────────────────────────────────────────
+  llm-service:
+    build:
+      context: ./services/llm-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      APP_ENV: development
+      PORT: "8003"
+    env_file:
+      - ./services/llm-service/.env
+    volumes:
+      - ./services/llm-service:/app
+    networks:
+      - mono-network
+    restart: unless-stopped
+
+  # ─── Notifications Service ────────────────────────────────────
+  notifications-service:
+    build:
+      context: ./services/notifications-service
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8004"
+    environment:
+      APP_ENV: development
+      PORT: "8004"
+    env_file:
+      - ./services/notifications-service/.env
+    volumes:
+      - ./services/notifications-service:/app
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - mono-network
+    restart: unless-stopped
+
+  # ─── Infrastructure ───────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-mono}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mono_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-mono_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-mono}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mono-network
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mono-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  mono-network:
+    driver: bridge

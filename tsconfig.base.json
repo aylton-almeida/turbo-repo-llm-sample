@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "strict": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "paths": {
+      "@mono/types": [
+        "../../packages/types/src/index.ts"
+      ],
+      "@mono/types/*": [
+        "../../packages/types/src/*"
+      ],
+      "@mono/ui": [
+        "../../packages/ui/src/index.ts"
+      ],
+      "@mono/ui/*": [
+        "../../packages/ui/src/*"
+      ],
+      "@mono/utils": [
+        "../../packages/utils/src/index.ts"
+      ],
+      "@mono/utils/*": [
+        "../../packages/utils/src/*"
+      ],
+      "@mono/api-client": [
+        "../../packages/api-client/src/index.ts"
+      ],
+      "@mono/api-client/*": [
+        "../../packages/api-client/src/*"
+      ]
+    }
+  }
+}
