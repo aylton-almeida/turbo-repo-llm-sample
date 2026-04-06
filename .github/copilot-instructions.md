@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-Polyglot monorepo: Next.js web, Flutter mobile, Python FastAPI microservices.
+Polyglot monorepo: Next.js web and Python FastAPI microservices.
 
 ## Universal Rules
 
@@ -16,6 +16,5 @@ Polyglot monorepo: Next.js web, Flutter mobile, Python FastAPI microservices.
 ## Stack Summary
 
 - `apps/web/`: Next.js 15, React 19, TypeScript 5
-- `apps/mobile/`: Flutter 3.22, Dart 3.3, Riverpod 2, Freezed, Go Router
 - `services/*/`: Python 3.12, FastAPI 0.115, Pydantic v2, SQLAlchemy 2
 - `packages/*/`: `@mono/types`, `@mono/ui`, `@mono/utils`, `@mono/api-client`

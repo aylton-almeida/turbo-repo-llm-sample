@@ -6,7 +6,6 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 GLOBAL_SRC="$ROOT_DIR/.ai/rules/global.md"
 PY_SRC="$ROOT_DIR/.ai/rules/python-fastapi.md"
 NEXT_SRC="$ROOT_DIR/.ai/rules/nextjs.md"
-FLUTTER_SRC="$ROOT_DIR/.ai/rules/flutter.md"
 MICRO_SRC="$ROOT_DIR/.ai/rules/microservices.md"
 
 mkdir -p "$ROOT_DIR/.github/instructions" "$ROOT_DIR/.cursor/rules"
@@ -70,12 +69,6 @@ render_copilot_instruction \
   "$ROOT_DIR/.github/instructions/nextjs.instructions.md"
 
 render_copilot_instruction \
-  "Use when writing Flutter/Dart code: widgets, Riverpod providers, Freezed models, Go Router navigation, Dio HTTP calls, or feature modules in apps/mobile/." \
-  "apps/mobile/**" \
-  ".ai/rules/flutter.md" \
-  "$ROOT_DIR/.github/instructions/flutter.instructions.md"
-
-render_copilot_instruction \
   "Use when adding new microservices, defining service contracts, working on inter-service communication, configuring Docker, writing Dockerfiles, or following service conventions in the services/ directory." \
   "services/**" \
   ".ai/rules/microservices.md" \
@@ -106,12 +99,5 @@ render_cursor_rule \
   "false" \
   ".ai/rules/nextjs.md" \
   "$ROOT_DIR/.cursor/rules/nextjs.mdc"
-
-render_cursor_rule \
-  "Flutter/Dart rules for apps/mobile/ directory" \
-  "apps/mobile/**" \
-  "false" \
-  ".ai/rules/flutter.md" \
-  "$ROOT_DIR/.cursor/rules/flutter.mdc"
 
 printf "AI context sync complete.\n"

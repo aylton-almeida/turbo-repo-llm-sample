@@ -22,7 +22,6 @@ Instead of manually duplicating guidance in each format, all shared rule content
 - `.ai/rules/global.md`
 - `.ai/rules/python-fastapi.md`
 - `.ai/rules/nextjs.md`
-- `.ai/rules/flutter.md`
 - `.ai/rules/microservices.md`
 
 ## Generated files (do not edit manually)
